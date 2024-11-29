@@ -34,36 +34,39 @@ import (
 
 // Place a barrier in this function --use Mutex's and Semaphores
 func doStuff(goNum int, arrived *int, max int, wg *sync.WaitGroup, sharedLock *sync.Mutex, theChan chan bool) bool {
+	defer wg.Done()
 	time.Sleep(time.Second)
 	fmt.Println("Part A", goNum)
+
 	//we wait here until everyone has completed part A
 	sharedLock.Lock()
 	*arrived++
 	if *arrived == max { //last to arrive -signal others to go
-		sharedLock.Unlock() //unlock before any potentially blocking code
-		theChan <- true
-		<-theChan
+		for i := 0; i < max-1; i++ {
+			theChan <- true
+		}
+		*arrived = 0
+		sharedLock.Unlock()
 	} else { //not all here yet we wait until signal
-		sharedLock.Unlock() //unlock before any potentially blocking code
+		sharedLock.Unlock()
 		<-theChan
-		theChan <- true //once we get through send signal to next routine to continue
 	} //end of if-else
 	fmt.Println("Part B", goNum)
 	sharedLock.Lock()
-	*arrived--
-	sharedLock.Unlock()
-	if *arrived == 0 {
-		sharedLock.Unlock()
-		for range max - 1 {
+	*arrived++
+
+	if *arrived == max {
+		for i := 0; i < max-1; i++ {
 			theChan <- true
 		}
+		*arrived = 0
+		sharedLock.Unlock()
 	} else {
 		sharedLock.Unlock()
 		<-theChan
 	}
 
 	fmt.Println("PartC", goNum)
-	wg.Done()
 	return true
 } //end-doStuff
 
@@ -74,8 +77,9 @@ func main() {
 	wg.Add(totalRoutines)
 	//we will need some of these
 	var theLock sync.Mutex
-	theChan := make(chan bool)     //use unbuffered channel in place of semaphore
-	for i := range totalRoutines { //create the go Routines here
+	theChan := make(chan bool) //use unbuffered channel in place of semaphore
+
+	for i := 0; i < totalRoutines; i++ { //create go routines here
 		go doStuff(i, &arrived, totalRoutines, &wg, &theLock, theChan)
 	}
 	wg.Wait() //wait for everyone to finish before exiting

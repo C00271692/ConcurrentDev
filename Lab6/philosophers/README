@@ -1,0 +1,38 @@
+The README file is a text file that explains what a project is.
+It should contain information on
+
+1. Project Licence
+2. Authors of Project
+3. How to install project
+4. List of any required Libraries, platform issues, etc.
+5. TO DO section listing items that need to be completed (errors, missing features etc.)
+6. List of files and what they contain
+7. Any other relevent information
+
+//dining philosophers problem solution thorugh footman
+//Copyright (C) 2024 Kacper Krakowiak
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+//--------------------------------------------
+// Author: Kacper Krakowiak (C00271692)
+// Created on 30/11/2024
+// Modified by:
+// Description:
+// A fix to the provided dining philosophers problem solution. The fix involves the introduction of a footman who will
+// ensure that only 4 philosophers can eat at any one time. The footman is pretty much a semaphore that is used to
+// control access to the table. The footman will allow a philosopher to eat only if there are less than 4 philosophers
+// Issues:
+// hopefully none
+//--------------------------------------------
